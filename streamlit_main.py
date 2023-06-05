@@ -8,6 +8,8 @@ import altair
 from sklearn.decomposition import PCA
 from SNNDPC import SNNDPC
 from numpy import min, max
+from scipy.stats import gaussian_kde
+
 
 @st.cache_data
 def load1():
