@@ -10,12 +10,16 @@ from SNNDPC import SNNDPC
 from numpy import min, max
 
 @st.cache_data
-def show1():
-
+def load1():
     data_1 = pd.read_csv("CreditCard.csv")
     data_1.dropna(subset=["CREDIT_LIMIT"], inplace=True)
     data_1.drop(["CUST_ID"], axis=1, inplace=True)
     data_1["MINIMUM_PAYMENTS"].fillna(data_1["MINIMUM_PAYMENTS"].median(), inplace=True)
+    return data_1
+
+def show1():
+
+    data_1 = load1()
 
     column_names_1 = data_1.columns.tolist()
 
@@ -43,7 +47,7 @@ def show1():
         i += 1
 
 @st.cache_data
-def show2():
+def load2():
     DA=pd.read_csv('CreditCard.csv')
     DA.dropna(subset=['CREDIT_LIMIT'], inplace=True)
     DA.drop(['CUST_ID'], axis=1, inplace=True)
@@ -53,10 +57,11 @@ def show2():
     DA['MINIMUM_PAYMENTS'].fillna(DA['MINIMUM_PAYMENTS'].median(), inplace=True)
 
     dat=DA.values[5000:6000]
+    return dat
     
+def show2():
+    dat = load2()
     
-
-
     dat = PCA(n_components=6).fit_transform(dat)
     dat = (dat - min(dat, axis=0)) / (max(dat, axis=0) - min(dat, axis=0))
 
