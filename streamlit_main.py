@@ -205,6 +205,8 @@ def M():
 
 # 填充核密度曲线下方区域
             ax.fill_between(x, density, color='skyblue', alpha=0.5)
+    
+            st.pyplot(fig)
         i += 1
 
     if tag1 == 1:
