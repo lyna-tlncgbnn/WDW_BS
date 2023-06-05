@@ -90,8 +90,37 @@ for tab in tabs:
     i += 1
 
 if tag == 1:
-    
-   st.write("hell0")
+
+    data_1 = pd.read_csv("CreditCard.csv")
+    data_1.dropna(subset=["CREDIT_LIMIT"], inplace=True)
+    data_1.drop(["CUST_ID"], axis=1, inplace=True)
+    data_1["MINIMUM_PAYMENTS"].fillna(data["MINIMUM_PAYMENTS"].median(), inplace=True)
+
+    column_names_1 = data.columns.tolist()
+
+    st.header(" ")
+    st.subheader("用户所处位置信息")
+    tabs = (tab1,tab2,tab3,tab4,tab5,tab6,tab7,tab8,tab9,tab10,tab11,tab12,tab13,tab14,tab15,tab16,tab17,) = st.tabs(
+    [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N","O","P","Q",]
+)
+    i = 0
+
+    for tab in tabs:
+        with tab:
+            #tab.subheader("用户所处位置")
+            
+            fig, ax = plt.subplots()
+            sns.kdeplot(data_1[column_names[i]],color="Blue",shade=True,ax=ax)
+            sns.lineplot(
+                [csv.iloc[0,i+1], csv.iloc[0,i+1]],
+                [0, sns.kdeplot(data_1[column_names[i]]).get_ylim()[1]],
+                color="r",
+                linestyle="--",
+            )
+            sns.kdeplot(data_1[column_names_1[i]], color="Blue", shade=True, ax=ax)
+            st.pyplot(fig)
+        i += 1
+
 if tag_2 == 1:
     DA=pd.read_csv('CreditCard.csv')
     DA.dropna(subset=['CREDIT_LIMIT'], inplace=True)
