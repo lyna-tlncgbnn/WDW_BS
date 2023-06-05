@@ -9,94 +9,15 @@ from sklearn.decomposition import PCA
 from SNNDPC import SNNDPC
 from numpy import min, max
 
-data = pd.read_csv("CreditCard.csv")
-data.dropna(subset=["CREDIT_LIMIT"], inplace=True)
-data.drop(["CUST_ID"], axis=1, inplace=True)
-data["MINIMUM_PAYMENTS"].fillna(data["MINIMUM_PAYMENTS"].median(), inplace=True)
 
-column_names = data.columns.tolist()
-data_np = data.values[:, 1:]
-lis = [data[[s]] for s in column_names]
-
-tag = 0
-tag_2 = 0
-
-
-
-st.header("用户信息分布统计")
-with st.sidebar:
-    global csv
-    uploaded_file = st.file_uploader("请选择客户信息文件", help="excel")
-    if uploaded_file is not None:
-        csv_data = pd.read_csv(uploaded_file)
-        csv = csv_data
-        #st.write(csv.iloc[0,1])
-        # st.write(dataframe.loc[0, :])
-        # st.write(csv_data)
-        st.header(csv_data.iloc[0, 0])
-
-        col1, col2, col3 = st.columns(3)
-        col1.metric(
-            "余额",
-            csv_data.iloc[0, 1],"-" if data['PAYMENTS'].mean()-csv_data.iloc[0, 14]>0 else "+"
-        )
-        col1.metric("总消费", csv_data.iloc[0, 14], "-" if data['BALANCE'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col1.metric("可用预付现金", csv_data.iloc[0, 6],"-" if data['CASH_ADVANCE'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col1.metric("分期采购金额", csv_data.iloc[0, 5],"-" if data['INSTALLMENTS_PURCHASES'].mean()-csv_data.iloc[0, 14]>0 else "+")
-
-        col2.metric("余额更新率", csv_data.iloc[0, 2], "-" if data['BALANCE_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col2.metric("购买频率", csv_data.iloc[0, 7], "-" if data['PURCHASES_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col2.metric("预付现金频率", csv_data.iloc[0, 10], "-" if data['CASH_ADVANCE_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col2.metric("分期购买频率", csv_data.iloc[0, 9], "-" if data['PURCHASES_INSTALLMENTS_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
-
-        col3.metric("信用卡额度", csv_data.iloc[0, 13], "-" if data['CREDIT_LIMIT'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col3.metric("预付现金交易次数", csv_data.iloc[0, 11], "-" if data['CASH_ADVANCE_TRX'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col3.metric("全额付款比率", str(csv_data.iloc[0, 16]) + "%", "-" if data['PRC_FULL_PAYMENT'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        col3.metric("一次购买最高金额", csv_data.iloc[0, 4], "-" if data['ONEOFF_PURCHASES'].mean()-csv_data.iloc[0, 14]>0 else "+")
-        # mianinfo()
-        st.subheader(" ")
-        analys_button = st.button("分析", use_container_width=True)
-        if analys_button:
-            tag = 1
-
-        classfisy_button = st.button("聚类",use_container_width=True)
-        if classfisy_button:
-            tag_2 = 1
-            tag = 1
-st.subheader(" ")
-st.subheader("总体分布直方图")
-tabs = (tab1,tab2,tab3,tab4,tab5,tab6,tab7,tab8,tab9,tab10,tab11,tab12,tab13,tab14,tab15,tab16,tab17,) = st.tabs(
-    [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N","O","P","Q",]
-)
-
-i = 0
-
-for tab in tabs:
-    with tab:
-        #tab.subheader("总体分布直方图")
-
-        da = lis[i]
-        chart = (
-            altair.Chart(da)
-            .mark_bar()
-            .encode(
-                x=altair.X(
-                    column_names[i], bin=altair.Bin(maxbins=20), title=column_names[i]
-                ),
-                y="count()",
-            )
-        )
-        st.altair_chart(chart.interactive(), use_container_width=True)
-    i += 1
-
-if tag == 1:
+def show1():
 
     data_1 = pd.read_csv("CreditCard.csv")
     data_1.dropna(subset=["CREDIT_LIMIT"], inplace=True)
     data_1.drop(["CUST_ID"], axis=1, inplace=True)
-    data_1["MINIMUM_PAYMENTS"].fillna(data["MINIMUM_PAYMENTS"].median(), inplace=True)
+    data_1["MINIMUM_PAYMENTS"].fillna(data_1["MINIMUM_PAYMENTS"].median(), inplace=True)
 
-    column_names_1 = data.columns.tolist()
+    column_names_1 = data_1.columns.tolist()
 
     st.header(" ")
     st.subheader("用户所处位置信息")
@@ -110,10 +31,10 @@ if tag == 1:
             #tab.subheader("用户所处位置")
             
             fig, ax = plt.subplots()
-            sns.kdeplot(data_1[column_names[i]],color="Blue",shade=True,ax=ax)
+            sns.kdeplot(data_1[column_names_1[i]],color="Blue",shade=True,ax=ax)
             sns.lineplot(
                 [csv.iloc[0,i+1], csv.iloc[0,i+1]],
-                [0, sns.kdeplot(data_1[column_names[i]]).get_ylim()[1]],
+                [0, sns.kdeplot(data_1[column_names_1[i]]).get_ylim()[1]],
                 color="r",
                 linestyle="--",
             )
@@ -121,14 +42,14 @@ if tag == 1:
             st.pyplot(fig)
         i += 1
 
-if tag_2 == 1:
+def show2():
     DA=pd.read_csv('CreditCard.csv')
     DA.dropna(subset=['CREDIT_LIMIT'], inplace=True)
     DA.drop(['CUST_ID'], axis=1, inplace=True)
     DA.drop(['PURCHASES'],axis=1,inplace=True)
     DA.drop(['PURCHASES_INSTALLMENTS_FREQUENCY'], axis=1, inplace=True)
     DA.drop(['CASH_ADVANCE_FREQUENCY'], axis=1, inplace=True)
-    DA['MINIMUM_PAYMENTS'].fillna(data['MINIMUM_PAYMENTS'].median(), inplace=True)
+    DA['MINIMUM_PAYMENTS'].fillna(DA['MINIMUM_PAYMENTS'].median(), inplace=True)
 
     dat=DA.values[5000:6000]
     
@@ -187,7 +108,93 @@ if tag_2 == 1:
     st.altair_chart(chart+center_chart+sig_chart,theme="streamlit",use_container_width=True)
 
 
+def M():
+    data = pd.read_csv("CreditCard.csv")
+    data.dropna(subset=["CREDIT_LIMIT"], inplace=True)
+    data.drop(["CUST_ID"], axis=1, inplace=True)
+    data["MINIMUM_PAYMENTS"].fillna(data["MINIMUM_PAYMENTS"].median(), inplace=True)
 
+    column_names = data.columns.tolist()
+    lis = [data[[s]] for s in column_names]
+
+    tag1 = 0
+    tag2 = 0
+
+    st.header("用户信息分布统计")
+    with st.sidebar:
+        global csv
+        uploaded_file = st.file_uploader("请选择客户信息文件", help="excel")
+        if uploaded_file is not None:
+            csv_data = pd.read_csv(uploaded_file)
+            csv = csv_data
+            #st.write(csv.iloc[0,1])
+            # st.write(dataframe.loc[0, :])
+            # st.write(csv_data)
+            st.header(csv_data.iloc[0, 0])
+
+            col1, col2, col3 = st.columns(3)
+            col1.metric(
+                "余额",
+                csv_data.iloc[0, 1],"-" if data['PAYMENTS'].mean()-csv_data.iloc[0, 14]>0 else "+"
+            )
+            col1.metric("总消费", csv_data.iloc[0, 14], "-" if data['BALANCE'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col1.metric("可用预付现金", csv_data.iloc[0, 6],"-" if data['CASH_ADVANCE'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col1.metric("分期采购金额", csv_data.iloc[0, 5],"-" if data['INSTALLMENTS_PURCHASES'].mean()-csv_data.iloc[0, 14]>0 else "+")
+
+            col2.metric("余额更新率", csv_data.iloc[0, 2], "-" if data['BALANCE_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col2.metric("购买频率", csv_data.iloc[0, 7], "-" if data['PURCHASES_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col2.metric("预付现金频率", csv_data.iloc[0, 10], "-" if data['CASH_ADVANCE_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col2.metric("分期购买频率", csv_data.iloc[0, 9], "-" if data['PURCHASES_INSTALLMENTS_FREQUENCY'].mean()-csv_data.iloc[0, 14]>0 else "+")
+
+            col3.metric("信用卡额度", csv_data.iloc[0, 13], "-" if data['CREDIT_LIMIT'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col3.metric("预付现金交易次数", csv_data.iloc[0, 11], "-" if data['CASH_ADVANCE_TRX'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col3.metric("全额付款比率", str(csv_data.iloc[0, 16]) + "%", "-" if data['PRC_FULL_PAYMENT'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            col3.metric("一次购买最高金额", csv_data.iloc[0, 4], "-" if data['ONEOFF_PURCHASES'].mean()-csv_data.iloc[0, 14]>0 else "+")
+            # mianinfo()
+            st.subheader(" ")
+            analys_button = st.button("分析", use_container_width=True)
+            if analys_button:
+                tag1 = 1
+
+            classfisy_button = st.button("聚类",use_container_width=True)
+            if classfisy_button:
+                tag1 = 1
+                tag2 = 1
+
+    st.subheader(" ")
+    st.subheader("总体分布直方图")
+    tabs = (tab1,tab2,tab3,tab4,tab5,tab6,tab7,tab8,tab9,tab10,tab11,tab12,tab13,tab14,tab15,tab16,tab17,) = st.tabs(
+        [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N","O","P","Q",]
+    )
+
+    i = 0
+
+    for tab in tabs:
+        with tab:
+            #tab.subheader("总体分布直方图")
+
+            da = lis[i]
+            chart = (
+                altair.Chart(da)
+                .mark_bar()
+                .encode(
+                    x=altair.X(
+                        column_names[i], bin=altair.Bin(maxbins=20), title=column_names[i]
+                    ),
+                    y="count()",
+                )
+            )
+            st.altair_chart(chart.interactive(), use_container_width=True)
+        i += 1
+
+    if tag1 == 1:
+        show1()
+    if tag2 == 1:
+        show2()
+
+
+
+M()
 
 
 
