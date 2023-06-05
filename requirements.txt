@@ -4,4 +4,4 @@ numpy
 matplotlib
 altair
 seaborn
-sklearn
+scikit-learn
