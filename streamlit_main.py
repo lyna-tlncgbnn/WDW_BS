@@ -9,7 +9,7 @@ from sklearn.decomposition import PCA
 from SNNDPC import SNNDPC
 from numpy import min, max
 
-
+@st.cache_data
 def show1():
 
     data_1 = pd.read_csv("CreditCard.csv")
@@ -42,6 +42,7 @@ def show1():
             st.pyplot(fig)
         i += 1
 
+@st.cache_data
 def show2():
     DA=pd.read_csv('CreditCard.csv')
     DA.dropna(subset=['CREDIT_LIMIT'], inplace=True)
