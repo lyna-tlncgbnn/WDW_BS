@@ -186,16 +186,23 @@ def M():
         with tab:
             #tab.subheader("用户所处位置")
             
-            fig, ax = plt.subplots()
-            sns.kdeplot(data_1[column_names_1[i]],color="Blue",shade=True,ax=ax)
-            sns.lineplot(
-                [csv.iloc[0,i+1], csv.iloc[0,i+1]],
-                [0, sns.kdeplot(data_1[column_names_1[i]]).get_ylim()[1]],
-                color="r",
-                linestyle="--",
-            )
-            sns.kdeplot(data_1[column_names_1[i]], color="Blue", shade=True, ax=ax)
-            st.pyplot(fig)
+            fig,ax = plt.subplots()
+            data = np.random.randn(1000)  # 随机生成一组数据
+
+# 使用高斯核估计密度函数
+            kde = gaussian_kde(data)
+
+# 生成一组横轴数据
+            x = np.linspace(data.min(), data.max(), 100)
+
+# 计算对应的核密度值
+            density = kde(x)
+
+# 绘制核密度曲线
+            ax.plot(x, density, label='Density')
+
+# 填充核密度曲线下方区域
+            ax.fill_between(x, density, color='skyblue', alpha=0.5)
         i += 1
 
     if tag1 == 1:
